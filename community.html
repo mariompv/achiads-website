@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunidad ACHIADS - Noticias, Publicaciones y Más</title>
+    <meta name="description" content="Únete a la comunidad ACHIADS. Comparte noticias, publicaciones, videos y participa en discusiones sobre IA y desarrollo sustentable.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://achiads.cl/community.html">
+    <meta property="og:title" content="Comunidad ACHIADS - IA para el Desarrollo Sustentable">
+    <meta property="og:description" content="Únete a nuestra comunidad. Comparte y descubre contenido sobre IA responsable y desarrollo sustentable.">
+    <meta property="og:image" content="https://achiads.cl/assets/images/community-banner.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://achiads.cl/community.html">
+    <meta property="twitter:title" content="Comunidad ACHIADS">
+    <meta property="twitter:description" content="Únete a nuestra comunidad. Comparte y descubre contenido sobre IA responsable y desarrollo sustentable.">
+    <meta property="twitter:image" content="https://achiads.cl/assets/images/community-banner.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://achiads.cl/community.html">
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos específicos para la página de comunidad */
+        .community-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: var(--white);
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .community-hero h1 {
+            color: var(--white);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .community-hero p {
+            opacity: 0.9;
+            font-size: 1.125rem;
+        }
+
+        .community-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-box {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-family: var(--font-family-base);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--neutral-200);
+            background: var(--white);
+            color: var(--neutral-700);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.875rem;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active:hover {
+            color: var(--white);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        @media (min-width: 768px) {
+            .posts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .posts-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .post-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            border: 1px solid var(--neutral-200);
+            cursor: pointer;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 200px;
+            background: var(--neutral-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .post-type-badge {
+            position: absolute;
+            top: var(--spacing-sm);
+            left: var(--spacing-sm);
+            background: rgba(0,0,0,0.7);
+            color: var(--white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .post-content {
+            padding: var(--spacing-lg);
+        }
+
+        .post-title {
+            font-size: 1.125rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-sm);
+            color: var(--neutral-900);
+            line-height: 1.3;
+        }
+
+        .post-excerpt {
+            color: var(--neutral-500);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: var(--spacing-md);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--neutral-500);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            border-radius: 4px;
+            transition: color var(--transition-fast);
+        }
+
+        .like-btn:hover,
+        .like-btn.liked {
+            color: var(--secondary);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .share-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.875rem;
+        }
+
+        .share-btn.facebook { background: #1877F2; color: white; }
+        .share-btn.twitter { background: #1DA1F2; color: white; }
+        .share-btn.linkedin { background: #0A66C2; color: white; }
+        .share-btn.instagram { background: linear-gradient(45deg, #F56040, #E1306C, #833AB4); color: white; }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .add-post-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            z-index: 1000;
+        }
+
+        .add-post-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background: var(--white);
+            margin: 2rem auto;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--neutral-500);
+            padding: var(--spacing-xs);
+        }
+
+        .modal-body {
+            padding: var(--spacing-lg);
+        }
+
+        .comments-section {
+            border-top: 1px solid var(--neutral-200);
+            padding: var(--spacing-lg);
+        }
+
+        .comment {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: var(--font-weight-bold);
+            font-size: 0.875rem;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .comment-author {
+            font-weight: var(--font-weight-medium);
+            color: var(--neutral-900);
+        }
+
+        .comment-date {
+            font-size: 0.75rem;
+            color: var(--neutral-500);
+        }
+
+        .comment-text {
+            color: var(--neutral-700);
+            line-height: 1.5;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-family: var(--font-family-base);
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .add-post-form {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .form-group {
+            display: grid;
+            gap: var(--spacing-xs);
+        }
+
+        .form-group label {
+            font-weight: var(--font-weight-medium);
+            color: var(--neutral-700);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-family: var(--font-family-base);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .no-posts {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            color: var(--neutral-500);
+        }
+
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--neutral-500);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="header__container">
+                <a href="index.html" class="logo" aria-label="ACHIADS - Inicio">
+                    <div class="logo__icon" aria-hidden="true">AI</div>
+                    <span>ACHIADS</span>
+                </a>
+                
+                <nav class="nav" role="navigation" aria-label="Navegación principal">
+                    <ul class="nav__list">
+                        <li><a href="index.html" class="nav__link">Inicio</a></li>
+                        <li><a href="index.html#nosotros" class="nav__link">Nosotros</a></li>
+                        <li><a href="index.html#proyectos" class="nav__link">Proyectos</a></li>
+                        <li><a href="index.html#investigacion" class="nav__link">Investigación</a></li>
+                        <li><a href="community.html" class="nav__link" style="color: var(--primary);">Comunidad</a></li>
+                        <li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+                    </ul>
+                </nav>
+                
+                <a href="index.html#unirse" class="cta-button" role="button">Únete a ACHIADS</a>
+                
+                <button class="mobile-menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main role="main">
+        <!-- Hero Section -->
+        <section class="community-hero">
+            <div class="container">
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h1>Comunidad ACHIADS</h1>
+                    <p>
+                        Comparte conocimiento, descubre las últimas noticias sobre IA sustentable, 
+                        participa en discusiones y conecta con otros miembros de nuestra comunidad.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Content -->
+        <section class="section">
+            <div class="container">
+                <!-- Controls -->
+                <div class="community-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar publicaciones...">
+                        <button onclick="searchPosts()" class="cta-button">🔍</button>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="news">Noticias</button>
+                        <button class="filter-btn" data-filter="research">Investigación</button>
+                        <button class="filter-btn" data-filter="video">Videos</button>
+                        <button class="filter-btn" data-filter="event">Eventos</button>
+                        <button class="filter-btn" data-filter="discussion">Discusión</button>
+                    </div>
+                </div>
+
+                <!-- Posts Grid -->
+                <div id="postsGrid" class="posts-grid">
+                    <!-- Los posts se cargarán dinámicamente -->
+                </div>
+
+                <div id="loadingIndicator" class="loading" style="display: none;">
+                    Cargando más contenido...
+                </div>
+
+                <div id="noPostsMessage" class="no-posts" style="display: none;">
+                    <h3>No se encontraron publicaciones</h3>
+                    <p>No hay contenido que coincida con tu búsqueda o filtros.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <h3>ACHIADS</h3>
+                    <p style="color: var(--neutral-200); margin-bottom: 1rem;">
+                        Asociación Chilena de Inteligencia Artificial para el Desarrollo Sustentable.
+                        Construyendo un futuro más inteligente y sustentable.
+                    </p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" aria-label="Twitter" style="color: var(--neutral-200);">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn" style="color: var(--neutral-200);">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3>Enlaces</h3>
+                    <ul class="footer__links">
+                        <li><a href="index.html#nosotros">Nosotros</a></li>
+                        <li><a href="index.html#proyectos">Proyectos</a></li>
+                        <li><a href="index.html#investigacion">Investigación</a></li>
+                        <li><a href="community.html">Comunidad</a></li>
+                        <li><a href="index.html#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer__section">
+                    <h3>Contacto</h3>
+                    <ul class="footer__links">
+                        <li>📧 info@achiads.cl</li>
+                        <li>📱 +56 9 1234 5678</li>
+                        <li>📍 Santiago, Chile</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2025 ACHIADS. Todos los derechos reservados. | 
+                   <a href="#privacy" style="color: var(--neutral-200);">Política de Privacidad</a> | 
+                   <a href="#terms" style="color: var(--neutral-200);">Términos de Uso</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add Post Button -->
+    <button id="addPostBtn" class="add-post-btn" title="Agregar nueva publicación">+</button>
+
+    <!-- Post Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Título del Post</h3>
+                <button class="modal-close" onclick="closePostModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenido del post se carga aquí -->
+            </div>
+            <div class="comments-section">
+                <h4>Comentarios (<span id="commentsCount">0</span>)</h4>
+                <div id="commentsList">
+                    <!-- Comentarios se cargan aquí -->
+                </div>
+                <form class="comment-form" onsubmit="addComment(event)">
+                    <div class="comment-avatar">TU</div>
+                    <textarea id="commentInput" class="comment-input" placeholder="Escribe tu comentario..." required></textarea>
+                    <button type="submit" class="cta-button">Comentar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Post Modal -->
+    <div id="addPostModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nueva Publicación</h3>
+                <button class="modal-close" onclick="closeAddPostModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="add-post-form" onsubmit="submitNewPost(event)">
+                    <div class="form-group">
+                        <label for="postTitle">Título *</label>
+                        <input type="text" id="postTitle" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postType">Tipo de publicación *</label>
+                        <select id="postType" required>
+                            <option value="news">Noticia</option>
+                            <option value="research">Investigación</option>
+                            <option value="video">Video</option>
+                            <option value="event">Evento</option>
+                            <option value="discussion">Discusión</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postExcerpt">Resumen</label>
+                        <textarea id="postExcerpt" placeholder="Breve descripción del contenido..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postContent">Contenido completo *</label>
+                        <textarea id="postContent" rows="8" required placeholder="Escribe el contenido completo de tu publicación..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postTags">Etiquetas (separadas por comas)</label>
+                        <input type="text" id="postTags" placeholder="IA, sostenibilidad, investigación">
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="cta-button cta-button--secondary" onclick="closeAddPostModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="cta-button">
+                            Publicar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo para posts
+        let posts = [
+            {
+                id: 1,
+                title: "Nueva investigación sobre IA para agricultura sustentable",
+                type: "research",
+                excerpt: "Un estudio revela cómo los algoritmos de machine learning pueden optimizar el uso de agua en cultivos, reduciendo el consumo hasta en un 30%.",
+                content: "Un equipo de investigadores de ACHIADS ha desarrollado un innovador sistema de IA que promete revolucionar la agricultura sustentable en Chile. El proyecto, que combina sensores IoT con algoritmos de machine learning, permite optimizar el riego de cultivos de manera inteligente...",
+                author: "Dra. María Rodriguez",
+                date: "2025-06-07",
+                likes: 24,
+                comments: [
+                    {
+                        id: 1,
+                        author: "Juan Pérez",
+                        date: "2025-06-07",
+                        content: "Excelente investigación! ¿Tienen planes para implementar esto en pequeñas granjas?"
+                    }
+                ],
+                tags: ["IA", "agricultura", "sustentabilidad", "machine learning"],
+                image: "🌱"
+            },
+            {
+                id: 2,
+                title: "Webinar: Ética en IA - Construyendo algoritmos responsables",
+                type: "event",
+                excerpt: "Únete a nuestro próximo webinar donde discutiremos los desafíos éticos en el desarrollo de sistemas de IA y cómo crear soluciones responsables.",
+                content: "El próximo 15 de junio realizaremos un webinar exclusivo para miembros de ACHIADS sobre ética en inteligencia artificial. Durante esta sesión de 2 horas, exploraremos casos prácticos y mejores prácticas para desarrollar IA responsable...",
+                author: "Dr. Juan Silva",
+                date: "2025-06-06",
+                likes: 18,
+                comments: [],
+                tags: ["evento", "ética", "IA", "webinar"],
+                image: "🎓"
+            },
+            {
+                id: 3,
+                title: "Video: Cómo la IA está transformando las ciudades inteligentes",
+                type: "video",
+                excerpt: "Descubre en este video documentos casos reales de implementación de IA en ciudades de Chile y cómo están mejorando la calidad de vida de sus habitantes.",
+                content: "En este video de 15 minutos, exploramos tres casos de éxito de implementación de IA en ciudades chilenas. Desde sistemas de gestión de tráfico hasta optimización de servicios públicos...",
+                author: "Ana Contreras",
+                date: "2025-06-05",
+                likes: 31,
+                comments: [
+                    {
+                        id: 1,
+                        author: "Carlos Mendoza",
+                        date: "2025-06-05",
+                        content: "Muy interesante! Me gustaría saber más sobre el proyecto de Santiago."
+                    },
+                    {
+                        id: 2,
+                        author: "Laura Torres",
+                        date: "2025-06-06",
+                        content: "¿Tienen datos sobre el impacto en la reducción de emisiones?"
+                    }
+                ],
+                tags: ["video", "ciudades inteligentes", "casos de éxito"],
+                image: "🎥"
+            },
+            {
+                id: 4,
+                title: "Chile lidera iniciativa latinoamericana de IA responsable",
+                type: "news",
+                excerpt: "El gobierno chileno anuncia nueva alianza regional para promover el desarrollo ético de la inteligencia artificial en América Latina.",
+                content: "En una decisión histórica, Chile se posiciona como líder regional en el desarrollo de marcos regulatorios para IA responsable. La iniciativa, respaldada por ACHIADS, busca crear estándares comunes para toda la región...",
+                author: "Redacción ACHIADS",
+                date: "2025-06-04",
+                likes: 42,
+                comments: [
+                    {
+                        id: 1,
+                        author: "Miguel Sanchez",
+                        date: "2025-06-04",
+                        content: "¡Excelentes noticias! Esto posicionará a Chile como referente en la región."
+                    }
+                ],
+                tags: ["noticias", "gobierno", "regulación", "latinoamérica"],
+                image: "📰"
+            },
+            {
+                id: 5,
+                title: "Debate: ¿Debe regularse más estrictamente la IA en aplicaciones médicas?",
+                type: "discussion",
+                excerpt: "Abrimos el debate sobre la necesidad de marcos regulatorios más estrictos para aplicaciones de IA en el sector salud. ¿Qué opinas?",
+                content: "Con el creciente uso de IA en diagnósticos médicos y tratamientos, surge la pregunta sobre qué nivel de regulación es apropiado. Por un lado, queremos fomentar la innovación que puede salvar vidas. Por otro, debemos proteger a los pacientes...",
+                author: "Comunidad ACHIADS",
+                date: "2025-06-03",
+                likes: 15,
+                comments: [
+                    {
+                        id: 1,
+                        author: "Dr. Patricia Lagos",
+                        date: "2025-06-03",
+                        content: "Como médica, creo que necesitamos un equilibrio. La regulación debe existir pero no frenar la innovación."
+                    },
+                    {
+                        id: 2,
+                        author: "Roberto Díaz",
+                        date: "2025-06-04",
+                        content: "La transparencia en los algoritmos médicos debería ser obligatoria."
+                    }
+                ],
+                tags: ["debate", "salud", "regulación", "ética médica"],
+                image: "💬"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+        let currentPostId = null;
+
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPosts();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Filtros
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderPosts();
+                });
+            });
+
+            // Búsqueda en tiempo real
+            document.getElementById('searchInput').addEventListener('input', function() {
+                currentSearchQuery = this.value.toLowerCase();
+                renderPosts();
+            });
+
+            // Botón agregar post
+            document.getElementById('addPostBtn').addEventListener('click', openAddPostModal);
+
+            // Cerrar modales al hacer clic fuera
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        function renderPosts() {
+            const grid = document.getElementById('postsGrid');
+            const noPostsMessage = document.getElementById('noPostsMessage');
+            
+            let filteredPosts = posts.filter(post => {
+                const matchesFilter = currentFilter === 'all' || post.type === currentFilter;
+                const matchesSearch = currentSearchQuery === '' || 
+                    post.title.toLowerCase().includes(currentSearchQuery) ||
+                    post.excerpt.toLowerCase().includes(currentSearchQuery) ||
+                    post.tags.some(tag => tag.toLowerCase().includes(currentSearchQuery));
+                
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filteredPosts.length === 0) {
+                grid.innerHTML = '';
+                noPostsMessage.style.display = 'block';
+                return;
+            }
+
+            noPostsMessage.style.display = 'none';
+            
+            grid.innerHTML = filteredPosts.map(post => `
+                <article class="post-card" onclick="openPostModal(${post.id})">
+                    <div class="post-image">
+                        <span class="post-type-badge">${getTypeLabel(post.type)}</span>
+                        ${post.image}
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.excerpt}</p>
+                        <div class="post-meta">
+                            <span>Por ${post.author}</span>
+                            <span>${formatDate(post.date)}</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="like-btn ${isPostLiked(post.id) ? 'liked' : ''}" onclick="toggleLike(event, ${post.id})">
+                                ❤️ ${post.likes}
+                            </button>
+                            <div class="share-buttons">
+                                <button class="share-btn facebook" onclick="sharePost(event, ${post.id}, 'facebook')" title="Compartir en Facebook">f</button>
+                                <button class="share-btn twitter" onclick="sharePost(event, ${post.id}, 'twitter')" title="Compartir en Twitter">t</button>
+                                <button class="share-btn linkedin" onclick="sharePost(event, ${post.id}, 'linkedin')" title="Compartir en LinkedIn">in</button>
+                                <button class="share-btn instagram" onclick="sharePost(event, ${post.id}, 'instagram')" title="Compartir en Instagram">ig</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                'news': 'Noticia',
+                'research': 'Investigación',
+                'video': 'Video',
+                'event': 'Evento',
+                'discussion': 'Discusión'
+            };
+            return labels[type] || type;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-CL', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function searchPosts() {
+            currentSearchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderPosts();
+        }
+
+        function openPostModal(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            currentPostId = postId;
+            
+            document.getElementById('modalTitle').textContent = post.title;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="post-meta" style="margin-bottom: 1rem;">
+                    <strong>Por:</strong> ${post.author} | 
+                    <strong>Fecha:</strong> ${formatDate(post.date)} | 
+                    <strong>Tipo:</strong> ${getTypeLabel(post.type)}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Etiquetas:</strong> 
+                    ${post.tags.map(tag => `<span style="background: var(--primary-light); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-right: 0.5rem;">${tag}</span>`).join('')}
+                </div>
+                <div style="line-height: 1.6; white-space: pre-line;">${post.content}</div>
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--neutral-200);">
+                    <button class="like-btn ${isPostLiked(post.id) ? 'liked' : ''}" onclick="toggleLike(event, ${post.id})" style="margin-right: 1rem;">
+                        ❤️ ${post.likes} Me gusta
+                    </button>
+                    <strong>Compartir:</strong>
+                    <div class="share-buttons" style="display: inline-flex; margin-left: 0.5rem;">
+                        <button class="share-btn facebook" onclick="sharePost(event, ${post.id}, 'facebook')" title="Compartir en Facebook">f</button>
+                        <button class="share-btn twitter" onclick="sharePost(event, ${post.id}, 'twitter')" title="Compartir en Twitter">t</button>
+                        <button class="share-btn linkedin" onclick="sharePost(event, ${post.id}, 'linkedin')" title="Compartir en LinkedIn">in</button>
+                        <button class="share-btn instagram" onclick="sharePost(event, ${post.id}, 'instagram')" title="Compartir en Instagram">ig</button>
+                    </div>
+                </div>
+            `;
+            
+            renderComments(post.comments);
+            document.getElementById('postModal').classList.add('active');
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.remove('active');
+            currentPostId = null;
+        }
+
+        function renderComments(comments) {
+            document.getElementById('commentsCount').textContent = comments.length;
+            document.getElementById('commentsList').innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-avatar">${getInitials(comment.author)}</div>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.author}</span>
+                            <span class="comment-date">${formatDate(comment.date)}</span>
+                        </div>
+                        <div class="comment-text">${comment.content}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        }
+
+        function addComment(event) {
+            event.preventDefault();
+            
+            const commentInput = document.getElementById('commentInput');
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText || !currentPostId) return;
+
+            const post = posts.find(p => p.id === currentPostId);
+            if (!post) return;
+
+            const newComment = {
+                id: Date.now(),
+                author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
+                date: new Date().toISOString().split('T')[0],
+                content: commentText
+            };
+
+            post.comments.push(newComment);
+            renderComments(post.comments);
+            commentInput.value = '';
+            
+            // Mostrar mensaje de éxito
+            showNotification('Comentario agregado exitosamente', 'success');
+        }
+
+        function toggleLike(event, postId) {
+            event.stopPropagation();
+            
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+            const isLiked = likedPosts.includes(postId);
+
+            if (isLiked) {
+                post.likes--;
+                const index = likedPosts.indexOf(postId);
+                likedPosts.splice(index, 1);
+            } else {
+                post.likes++;
+                likedPosts.push(postId);
+            }
+
+            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+            renderPosts();
+            
+            // Si el modal está abierto, actualizar también ahí
+            if (currentPostId === postId) {
+                openPostModal(postId);
+            }
+        }
+
+        function isPostLiked(postId) {
+            const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+            return likedPosts.includes(postId);
+        }
+
+        function sharePost(event, postId, platform) {
+            event.stopPropagation();
+            
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const url = encodeURIComponent(window.location.href + '?post=' + postId);
+            const title = encodeURIComponent(post.title);
+            const text = encodeURIComponent(post.excerpt);
+
+            let shareUrl;
+
+            switch (platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                    break;
+                case 'instagram':
+                    // Instagram no permite sharing directo, mostramos instrucciones
+                    showNotification('Copia el link y compártelo en tu historia de Instagram', 'info');
+                    navigator.clipboard.writeText(window.location.href + '?post=' + postId);
+                    return;
+            }
+
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+
+        function openAddPostModal() {
+            document.getElementById('addPostModal').classList.add('active');
+        }
+
+        function closeAddPostModal() {
+            document.getElementById('addPostModal').classList.remove('active');
+            document.querySelector('.add-post-form').reset();
+        }
+
+        function submitNewPost(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const title = document.getElementById('postTitle').value;
+            const type = document.getElementById('postType').value;
+            const excerpt = document.getElementById('postExcerpt').value;
+            const content = document.getElementById('postContent').value;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+            const newPost = {
+                id: Date.now(),
+                title,
+                type,
+                excerpt: excerpt || content.substring(0, 150) + '...',
+                content,
+                author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
+                date: new Date().toISOString().split('T')[0],
+                likes: 0,
+                comments: [],
+                tags,
+                image: getTypeEmoji(type)
+            };
+
+            posts.unshift(newPost); // Agregar al inicio
+            renderPosts();
+            closeAddPostModal();
+            showNotification('Publicación creada exitosamente', 'success');
+        }
+
+        function getTypeEmoji(type) {
+            const emojis = {
+                'news': '📰',
+                'research': '🔬',
+                'video': '🎥',
+                'event': '🎓',
+                'discussion': '💬'
+            };
+            return emojis[type] || '📄';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--primary)' : type === 'error' ? 'var(--secondary)' : 'var(--accent)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 6px;
+                box-shadow: var(--shadow-lg);
+                z-index: 3000;
+                max-width: 300px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // CSS para animaciones de notificación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Cargar post específico si viene en la URL
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('post');
+            if (postId) {
+                openPostModal(parseInt(postId));
+            }
+        });
+    </script>
+</body>
+</html>
