@@ -219,3 +219,35 @@ php_value max_input_time 300
 # Header add Access-Control-Allow-Origin "*"
 # Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
 # Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
+
+# Redirigir todas las solicitudes a maintenance.html
+RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+RewriteCond %{REQUEST_URI} !^/favicon\.svg$
+RewriteCond %{REQUEST_URI} !^/assets/
+RewriteRule ^(.*)$ /maintenance.html [R=302,L]
+
+# Configuración de caché para la página de mantenimiento
+<Files "maintenance.html">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</Files>
+
+# Configuración de seguridad básica
+Options -Indexes
+ServerSignature Off
+
+# Configuración de compresión
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# Configuración de caché para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

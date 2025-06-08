@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACHIADS - Mantenimiento</title>
+    <meta name="description" content="ACHIADS está en mantenimiento. Volveremos pronto con novedades para toda la comunidad.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <style>
+        :root {
+            --primary: #2E8B57;
+            --primary-light: #3CB371;
+            --primary-dark: #1F5F3F;
+            --secondary: #FF6B35;
+            --accent: #4A90E2;
+            --neutral-100: #F8F9FA;
+            --neutral-200: #E9ECEF;
+            --neutral-500: #6C757D;
+            --neutral-700: #495057;
+            --neutral-900: #212529;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--neutral-100);
+            color: var(--neutral-700);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .maintenance-container {
+            max-width: 800px;
+            text-align: center;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .logo__icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: var(--neutral-700);
+            margin-bottom: 2rem;
+        }
+
+        .maintenance-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .maintenance-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="maintenance-container">
+        <div class="logo">
+            <div class="logo__icon">AI</div>
+            <span>ACHIADS</span>
+        </div>
+        <div class="maintenance-icon">🔧</div>
+        <h1>Estamos realizando mantención y mejora a la página</h1>
+        <p>Prontamente volveremos con novedades para toda la comunidad</p>
+    </div>
+</body>
+</html> 
