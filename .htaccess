@@ -220,11 +220,15 @@ php_value max_input_time 300
 # Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
 # Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
 
-# Redirigir todas las solicitudes a maintenance.html
+# Redirigir todas las solicitudes a maintenance.html excepto la ruta /preview
 RewriteCond %{REQUEST_URI} !^/maintenance\.html$
 RewriteCond %{REQUEST_URI} !^/favicon\.svg$
 RewriteCond %{REQUEST_URI} !^/assets/
+RewriteCond %{REQUEST_URI} !^/preview/
 RewriteRule ^(.*)$ /maintenance.html [R=302,L]
+
+# Redirigir /preview a www.achiads.cl
+RewriteRule ^preview/(.*)$ https://www.achiads.cl/$1 [R=302,L]
 
 # Configuración de caché para la página de mantenimiento
 <Files "maintenance.html">
