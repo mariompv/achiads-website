@@ -1,0 +1,221 @@
+# ================================
+# ACHIADS - Configuración Apache
+# ================================
+
+# ================================
+# COMPRESIÓN GZIP
+# ================================
+<IfModule mod_deflate.c>
+    # Comprimir texto, HTML, JavaScript, CSS, XML
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/ld+json
+    AddOutputFilterByType DEFLATE application/font-woff
+    AddOutputFilterByType DEFLATE application/font-woff2
+    AddOutputFilterByType DEFLATE image/svg+xml
+    
+    # Excluir imágenes ya comprimidas
+    SetEnvIfNoCase Request_URI \
+        \.(?:gif|jpe?g|png|webp|ico)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \
+        \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+</IfModule>
+
+# ================================
+# CACHÉ DEL NAVEGADOR
+# ================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Imágenes (1 mes)
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # CSS y JavaScript (1 año)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    
+    # Fuentes (1 año)
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # HTML (1 hora)
+    ExpiresByType text/html "access plus 1 hour"
+    
+    # XML y JSON (1 día)
+    ExpiresByType application/xml "access plus 1 day"
+    ExpiresByType text/xml "access plus 1 day"
+    ExpiresByType application/json "access plus 1 day"
+    
+    # Documentos (1 semana)
+    ExpiresByType application/pdf "access plus 1 week"
+</IfModule>
+
+# ================================
+# HEADERS DE SEGURIDAD
+# ================================
+<IfModule mod_headers.c>
+    # Prevenir clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Prevenir MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Política de referrer
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Política de permisos
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
+    
+    # Content Security Policy (ajustar según necesidades)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com; frame-ancestors 'self'"
+    
+    # Forzar HTTPS (si SSL está disponible)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+    
+    # Versioning para cache busting
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # No cache para HTML
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# ================================
+# REDIRECCIONES HTTPS
+# ================================
+RewriteEngine On
+
+# Redirigir HTTP a HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirigir www a no-www (ajustar según preferencia)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ================================
+# PÁGINAS DE ERROR PERSONALIZADAS
+# ================================
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# ================================
+# PROTECCIÓN DE ARCHIVOS SENSIBLES
+# ================================
+
+# Proteger archivos de configuración
+<FilesMatch "^(\.htaccess|\.htpasswd|wp-config\.php|\.env|config\.php)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Proteger directorios de sistema
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.svn
+RedirectMatch 404 /node_modules
+RedirectMatch 404 /\.env
+
+# ================================
+# OPTIMIZACIONES ADICIONALES
+# ================================
+
+# Desactivar ETags para mejor caching
+FileETag None
+
+# Configurar charset por defecto
+AddDefaultCharset UTF-8
+
+# Habilitar FollowSymLinks
+Options +FollowSymLinks
+
+# Desactivar índice de directorios
+Options -Indexes
+
+# ================================
+# TIPOS MIME ADICIONALES
+# ================================
+<IfModule mod_mime.c>
+    # Fuentes web
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/truetype .ttf
+    AddType font/opentype .otf
+    
+    # Documentos
+    AddType application/json .json
+    AddType application/ld+json .jsonld
+    
+    # Imágenes modernas
+    AddType image/webp .webp
+    AddType image/avif .avif
+    
+    # Manifesto de aplicación web
+    AddType application/manifest+json .webmanifest
+    AddType text/cache-manifest .appcache
+</IfModule>
+
+# ================================
+# LÍMITES DE SEGURIDAD
+# ================================
+
+# Límite de tamaño de archivo de subida (ajustar según necesidades)
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 300
+php_value max_input_time 300
+
+# ================================
+# CONFIGURACIÓN PARA HOSTINGER
+# ================================
+
+# Optimizaciones específicas para Hostinger
+# (Hostinger suele tener estas configuraciones optimizadas por defecto)
+
+# Activar compresión mod_pagespeed si está disponible
+<IfModule pagespeed_module>
+    ModPagespeed on
+    ModPagespeedEnableFilters extend_cache,combine_css,combine_javascript,collapse_whitespace,remove_comments
+</IfModule>
+
+# ================================
+# REESCRITURA DE URLs AMIGABLES
+# ================================
+
+# Preparado para URLs amigables futuras
+# RewriteRule ^about/?$ /index.html#nosotros [R=302,L]
+# RewriteRule ^projects/?$ /index.html#proyectos [R=302,L]
+# RewriteRule ^research/?$ /index.html#investigacion [R=302,L]
+# RewriteRule ^contact/?$ /index.html#contacto [R=302,L]
+
+# ================================
+# CONFIGURACIÓN DE DESARROLLO LOCAL
+# ================================
+
+# Habilitar CORS para desarrollo (comentar en producción)
+# Header add Access-Control-Allow-Origin "*"
+# Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
+# Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"

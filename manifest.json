@@ -1,0 +1,128 @@
+{
+    "name": "ACHIADS - Asociación Chilena de IA para el Desarrollo Sustentable",
+    "short_name": "ACHIADS",
+    "description": "Impulsamos el desarrollo responsable de la inteligencia artificial para crear soluciones innovadoras que contribuyan al desarrollo sustentable de Chile y Latinoamérica.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#F8F9FA",
+    "theme_color": "#2E8B57",
+    "orientation": "portrait-primary",
+    "lang": "es",
+    "scope": "/",
+    
+    "icons": [
+      {
+        "src": "/favicon.svg",
+        "sizes": "any",
+        "type": "image/svg+xml",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/assets/images/icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/assets/images/icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/assets/images/icon-maskable-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "maskable"
+      },
+      {
+        "src": "/assets/images/icon-maskable-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ],
+    
+    "categories": [
+      "education",
+      "technology",
+      "nonprofit",
+      "sustainability"
+    ],
+    
+    "shortcuts": [
+      {
+        "name": "Proyectos",
+        "short_name": "Proyectos",
+        "description": "Ver nuestros proyectos de IA sustentable",
+        "url": "/#proyectos",
+        "icons": [
+          {
+            "src": "/assets/images/shortcut-projects.png",
+            "sizes": "96x96"
+          }
+        ]
+      },
+      {
+        "name": "Investigación",
+        "short_name": "Investigación",
+        "description": "Explorar nuestra investigación",
+        "url": "/#investigacion",
+        "icons": [
+          {
+            "src": "/assets/images/shortcut-research.png",
+            "sizes": "96x96"
+          }
+        ]
+      },
+      {
+        "name": "Únete",
+        "short_name": "Únete",
+        "description": "Unirse a ACHIADS",
+        "url": "/#unirse",
+        "icons": [
+          {
+            "src": "/assets/images/shortcut-join.png",
+            "sizes": "96x96"
+          }
+        ]
+      }
+    ],
+    
+    "related_applications": [
+      {
+        "platform": "web",
+        "url": "https://achiads.cl/"
+      }
+    ],
+    
+    "prefer_related_applications": false,
+    
+    "screenshots": [
+      {
+        "src": "/assets/images/screenshot-desktop.png",
+        "sizes": "1280x720",
+        "type": "image/png",
+        "form_factor": "wide",
+        "label": "ACHIADS - Vista de escritorio"
+      },
+      {
+        "src": "/assets/images/screenshot-mobile.png",
+        "sizes": "375x812",
+        "type": "image/png",
+        "form_factor": "narrow",
+        "label": "ACHIADS - Vista móvil"
+      }
+    ],
+    
+    "edge_side_panel": {
+      "preferred_width": 400
+    },
+    
+    "protocol_handlers": [
+      {
+        "protocol": "mailto",
+        "url": "/#contacto?email=%s"
+      }
+    ]
+  }

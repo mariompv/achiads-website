@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página no encontrada - ACHIADS</title>
+    <meta name="description" content="La página que buscas no existe. Vuelve al sitio principal de ACHIADS.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2E8B57;
+            --primary-light: #3CB371;
+            --accent: #4A90E2;
+            --neutral-100: #F8F9FA;
+            --neutral-500: #6C757D;
+            --neutral-700: #495057;
+            --neutral-900: #212529;
+            --white: #FFFFFF;
+            --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, var(--neutral-100) 0%, var(--white) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-700);
+        }
+
+        .error-container {
+            max-width: 600px;
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin: 1rem;
+        }
+
+        .error-code {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin: 1rem 0;
+        }
+
+        .error-description {
+            font-size: 1.125rem;
+            color: var(--neutral-500);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        @media (min-width: 480px) {
+            .error-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            font-family: var(--font-family-base);
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn--primary:hover {
+            background: #1F5F3F;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn--secondary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo__icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        .suggestions {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--neutral-100);
+        }
+
+        .suggestions h3 {
+            color: var(--neutral-900);
+            margin-bottom: 1rem;
+        }
+
+        .suggestions ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .suggestions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestions a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .suggestions a:hover {
+            color: #1F5F3F;
+            text-decoration: underline;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            .error-container {
+                animation: none;
+            }
+            .btn {
+                transition: none;
+            }
+        }
+
+        /* Focus styles */
+        *:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <a href="/" class="logo" aria-label="ACHIADS - Volver al inicio">
+            <div class="logo__icon" aria-hidden="true">AI</div>
+            <span>ACHIADS</span>
+        </a>
+        
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Página no encontrada</h2>
+        <p class="error-description">
+            Lo sentimos, la página que buscas no existe o ha sido movida. 
+            Es posible que hayas escrito mal la URL o que el enlace esté desactualizado.
+        </p>
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn--primary">Volver al inicio</a>
+            <a href="/#contacto" class="btn btn--secondary">Contactar soporte</a>
+        </div>
+        
+        <div class="suggestions">
+            <h3>¿Qué puedes hacer?</h3>
+            <ul>
+                <li>• <a href="/#nosotros">Conocer más sobre ACHIADS</a></li>
+                <li>• <a href="/#proyectos">Ver nuestros proyectos</a></li>
+                <li>• <a href="/#investigacion">Explorar nuestra investigación</a></li>
+                <li>• <a href="/#recursos">Acceder a recursos</a></li>
+                <li>• <a href="/#unirse">Unirte a nuestra comunidad</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Analytics de errores 404 (opcional)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_not_found', {
+                'page_location': window.location.href,
+                'page_referrer': document.referrer
+            });
+        }
+
+        // Redirigir URLs antiguas comunes (si es necesario)
+        const currentPath = window.location.pathname.toLowerCase();
+        const redirects = {
+            '/about': '/#nosotros',
+            '/projects': '/#proyectos',
+            '/research': '/#investigacion',
+            '/contact': '/#contacto',
+            '/join': '/#unirse'
+        };
+
+        if (redirects[currentPath]) {
+            window.location.href = redirects[currentPath];
+        }
+    </script>
+</body>
+</html>
