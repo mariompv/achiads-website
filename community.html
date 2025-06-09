@@ -1037,31 +1037,45 @@
         function submitNewPost(event) {
             event.preventDefault();
             
-            const formData = new FormData(event.target);
             const title = document.getElementById('postTitle').value;
             const type = document.getElementById('postType').value;
             const excerpt = document.getElementById('postExcerpt').value;
             const content = document.getElementById('postContent').value;
             const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-            const newPost = {
-                id: Date.now(),
+            const postData = {
                 title,
                 type,
                 excerpt: excerpt || content.substring(0, 150) + '...',
                 content,
                 author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
-                date: new Date().toISOString().split('T')[0],
-                likes: 0,
-                comments: [],
-                tags,
-                image: getTypeEmoji(type)
+                tags
             };
 
-            posts.unshift(newPost); // Agregar al inicio
-            renderPosts();
-            closeAddPostModal();
-            showNotification('Publicación creada exitosamente', 'success');
+            // Enviar al servidor
+            fetch('community_api.php?action=create_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Agregar el nuevo post al inicio de la lista
+                    posts.unshift(data.post);
+                    renderPosts();
+                    closeAddPostModal();
+                    showNotification('Publicación creada exitosamente', 'success');
+                } else {
+                    showNotification(data.message || 'Error al crear la publicación', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error al crear la publicación', 'error');
+            });
         }
 
         function getTypeEmoji(type) {
