@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Firebase Connection</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #debug {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de Conexión Firebase</h1>
+    <div id="status"></div>
+    <div>
+        <button onclick="testConnection()">Probar Conexión</button>
+        <button onclick="testWrite()">Probar Escritura</button>
+        <button onclick="testRead()">Probar Lectura</button>
+        <button onclick="clearTest()">Limpiar Datos de Prueba</button>
+    </div>
+    <div id="debug"></div>
+
+    <script>
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + (isError ? 'error' : 'success');
+        }
+
+        function logDebug(message) {
+            const debugDiv = document.getElementById('debug');
+            debugDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+        }
+
+        async function testConnection() {
+            try {
+                logDebug('Iniciando prueba de conexión...');
+                if (!firebase.apps.length) {
+                    throw new Error('Firebase no está inicializado');
+                }
+                logDebug('Firebase apps: ' + firebase.apps.length);
+                logDebug('Firebase config: ' + JSON.stringify(firebase.app().options));
+                showStatus('✅ Firebase está inicializado correctamente');
+            } catch (error) {
+                logDebug('Error en conexión: ' + error.message);
+                showStatus('❌ Error: ' + error.message, true);
+            }
+        }
+
+        async function testWrite() {
+            try {
+                logDebug('Iniciando prueba de escritura...');
+                const testDoc = {
+                    timestamp: new Date(),
+                    message: 'Test de escritura exitoso',
+                    randomId: Math.random().toString(36).substring(7)
+                };
+                
+                logDebug('Intentando escribir documento: ' + JSON.stringify(testDoc));
+                const docRef = await db.collection('test').add(testDoc);
+                logDebug('Documento escrito con ID: ' + docRef.id);
+                showStatus('✅ Escritura exitosa en Firestore');
+            } catch (error) {
+                logDebug('Error en escritura: ' + error.message);
+                showStatus('❌ Error al escribir: ' + error.message, true);
+            }
+        }
+
+        async function testRead() {
+            try {
+                logDebug('Iniciando prueba de lectura...');
+                const snapshot = await db.collection('test').get();
+                const docs = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                logDebug('Documentos encontrados: ' + docs.length);
+                logDebug('Datos: ' + JSON.stringify(docs, null, 2));
+                showStatus('✅ Lectura exitosa. Documentos encontrados: ' + docs.length);
+            } catch (error) {
+                logDebug('Error en lectura: ' + error.message);
+                showStatus('❌ Error al leer: ' + error.message, true);
+            }
+        }
+
+        async function clearTest() {
+            try {
+                logDebug('Limpiando datos de prueba...');
+                const snapshot = await db.collection('test').get();
+                const batch = db.batch();
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                logDebug('Datos de prueba eliminados');
+                showStatus('✅ Datos de prueba eliminados');
+            } catch (error) {
+                logDebug('Error al limpiar: ' + error.message);
+                showStatus('❌ Error al limpiar: ' + error.message, true);
+            }
+        }
+
+        // Probar conexión al cargar la página
+        testConnection();
+    </script>
+</body>
+</html> 

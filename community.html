@@ -29,6 +29,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="./firebase-config.js"></script>
+    
     <style>
         /* Estilos específicos para la página de comunidad */
         .community-hero {
@@ -649,118 +655,152 @@
     </div>
 
     <script>
-        // Datos de ejemplo para posts
-        let posts = [
-            {
-                id: 1,
-                title: "Nueva investigación sobre IA para agricultura sustentable",
-                type: "research",
-                excerpt: "Un estudio revela cómo los algoritmos de machine learning pueden optimizar el uso de agua en cultivos, reduciendo el consumo hasta en un 30%.",
-                content: "Un equipo de investigadores de ACHIADS ha desarrollado un innovador sistema de IA que promete revolucionar la agricultura sustentable en Chile. El proyecto, que combina sensores IoT con algoritmos de machine learning, permite optimizar el riego de cultivos de manera inteligente...",
-                author: "Dra. María Rodriguez",
-                date: "2025-06-07",
-                likes: 24,
-                comments: [
-                    {
-                        id: 1,
-                        author: "Juan Pérez",
-                        date: "2025-06-07",
-                        content: "Excelente investigación! ¿Tienen planes para implementar esto en pequeñas granjas?"
-                    }
-                ],
-                tags: ["IA", "agricultura", "sustentabilidad", "machine learning"],
-                image: "🌱"
-            },
-            {
-                id: 2,
-                title: "Webinar: Ética en IA - Construyendo algoritmos responsables",
-                type: "event",
-                excerpt: "Únete a nuestro próximo webinar donde discutiremos los desafíos éticos en el desarrollo de sistemas de IA y cómo crear soluciones responsables.",
-                content: "El próximo 15 de junio realizaremos un webinar exclusivo para miembros de ACHIADS sobre ética en inteligencia artificial. Durante esta sesión de 2 horas, exploraremos casos prácticos y mejores prácticas para desarrollar IA responsable...",
-                author: "Dr. Juan Silva",
-                date: "2025-06-06",
-                likes: 18,
-                comments: [],
-                tags: ["evento", "ética", "IA", "webinar"],
-                image: "🎓"
-            },
-            {
-                id: 3,
-                title: "Video: Cómo la IA está transformando las ciudades inteligentes",
-                type: "video",
-                excerpt: "Descubre en este video documentos casos reales de implementación de IA en ciudades de Chile y cómo están mejorando la calidad de vida de sus habitantes.",
-                content: "En este video de 15 minutos, exploramos tres casos de éxito de implementación de IA en ciudades chilenas. Desde sistemas de gestión de tráfico hasta optimización de servicios públicos...",
-                author: "Ana Contreras",
-                date: "2025-06-05",
-                likes: 31,
-                comments: [
-                    {
-                        id: 1,
-                        author: "Carlos Mendoza",
-                        date: "2025-06-05",
-                        content: "Muy interesante! Me gustaría saber más sobre el proyecto de Santiago."
-                    },
-                    {
-                        id: 2,
-                        author: "Laura Torres",
-                        date: "2025-06-06",
-                        content: "¿Tienen datos sobre el impacto en la reducción de emisiones?"
-                    }
-                ],
-                tags: ["video", "ciudades inteligentes", "casos de éxito"],
-                image: "🎥"
-            },
-            {
-                id: 4,
-                title: "Chile lidera iniciativa latinoamericana de IA responsable",
-                type: "news",
-                excerpt: "El gobierno chileno anuncia nueva alianza regional para promover el desarrollo ético de la inteligencia artificial en América Latina.",
-                content: "En una decisión histórica, Chile se posiciona como líder regional en el desarrollo de marcos regulatorios para IA responsable. La iniciativa, respaldada por ACHIADS, busca crear estándares comunes para toda la región...",
-                author: "Redacción ACHIADS",
-                date: "2025-06-04",
-                likes: 42,
-                comments: [
-                    {
-                        id: 1,
-                        author: "Miguel Sanchez",
-                        date: "2025-06-04",
-                        content: "¡Excelentes noticias! Esto posicionará a Chile como referente en la región."
-                    }
-                ],
-                tags: ["noticias", "gobierno", "regulación", "latinoamérica"],
-                image: "📰"
-            },
-            {
-                id: 5,
-                title: "Debate: ¿Debe regularse más estrictamente la IA en aplicaciones médicas?",
-                type: "discussion",
-                excerpt: "Abrimos el debate sobre la necesidad de marcos regulatorios más estrictos para aplicaciones de IA en el sector salud. ¿Qué opinas?",
-                content: "Con el creciente uso de IA en diagnósticos médicos y tratamientos, surge la pregunta sobre qué nivel de regulación es apropiado. Por un lado, queremos fomentar la innovación que puede salvar vidas. Por otro, debemos proteger a los pacientes...",
-                author: "Comunidad ACHIADS",
-                date: "2025-06-03",
-                likes: 15,
-                comments: [
-                    {
-                        id: 1,
-                        author: "Dr. Patricia Lagos",
-                        date: "2025-06-03",
-                        content: "Como médica, creo que necesitamos un equilibrio. La regulación debe existir pero no frenar la innovación."
-                    },
-                    {
-                        id: 2,
-                        author: "Roberto Díaz",
-                        date: "2025-06-04",
-                        content: "La transparencia en los algoritmos médicos debería ser obligatoria."
-                    }
-                ],
-                tags: ["debate", "salud", "regulación", "ética médica"],
-                image: "💬"
+        // Verificar que Firebase está inicializado
+        function checkFirebase() {
+            if (!window.db) {
+                console.error('Firebase no está inicializado correctamente');
+                showNotification('Error de conexión con la base de datos', 'error');
+                return false;
             }
-        ];
+            return true;
+        }
+
+        let posts = [];
+        let currentPostId = null;
+
+        // Cargar posts desde Firestore
+        async function loadPosts() {
+            if (!checkFirebase()) return;
+            
+            try {
+                const snapshot = await db.collection('posts').orderBy('date', 'desc').get();
+                posts = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                renderPosts();
+            } catch (error) {
+                console.error("Error cargando posts:", error);
+                showNotification('Error al cargar los posts', 'error');
+            }
+        }
+
+        // Crear nuevo post
+        async function submitNewPost(event) {
+            event.preventDefault();
+            
+            if (!checkFirebase()) return;
+
+            const title = document.getElementById('postTitle').value;
+            const type = document.getElementById('postType').value;
+            const excerpt = document.getElementById('postExcerpt').value;
+            const content = document.getElementById('postContent').value;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+            const newPost = {
+                title,
+                type,
+                excerpt: excerpt || content.substring(0, 150) + '...',
+                content,
+                author: 'Usuario Actual',
+                date: new Date().toISOString(),
+                likes: 0,
+                comments: [],
+                tags
+            };
+
+            try {
+                const docRef = await db.collection('posts').add(newPost);
+                newPost.id = docRef.id;
+                posts.unshift(newPost);
+                renderPosts();
+                closeAddPostModal();
+                showNotification('Publicación creada exitosamente', 'success');
+            } catch (error) {
+                console.error("Error creando post:", error);
+                showNotification('Error al crear la publicación', 'error');
+            }
+        }
+
+        // Dar like a un post
+        async function toggleLike(event, postId) {
+            event.stopPropagation();
+            
+            try {
+                const post = posts.find(p => p.id === postId);
+                if (!post) return;
+
+                const postRef = db.collection('posts').doc(postId);
+                const isLiked = post.likedBy && post.likedBy.includes('current-user'); // En una implementación real, usar el ID del usuario
+
+                if (isLiked) {
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(-1),
+                        likedBy: firebase.firestore.FieldValue.arrayRemove('current-user')
+                    });
+                    post.likes--;
+                } else {
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(1),
+                        likedBy: firebase.firestore.FieldValue.arrayUnion('current-user')
+                    });
+                    post.likes++;
+                }
+
+                renderPosts();
+                if (currentPostId === postId) {
+                    openPostModal(postId);
+                }
+            } catch (error) {
+                console.error("Error al dar like:", error);
+                showNotification('Error al actualizar el like', 'error');
+            }
+        }
+
+        // Agregar comentario
+        async function addComment(event) {
+            event.preventDefault();
+            
+            const commentInput = document.getElementById('commentInput');
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText || !currentPostId) return;
+
+            try {
+                const newComment = {
+                    id: Date.now(),
+                    author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
+                    date: new Date().toISOString(),
+                    content: commentText
+                };
+
+                await db.collection('posts').doc(currentPostId).update({
+                    comments: firebase.firestore.FieldValue.arrayUnion(newComment)
+                });
+
+                const post = posts.find(p => p.id === currentPostId);
+                if (post) {
+                    post.comments.push(newComment);
+                    renderComments(post.comments);
+                }
+
+                commentInput.value = '';
+                showNotification('Comentario agregado exitosamente', 'success');
+            } catch (error) {
+                console.error("Error al agregar comentario:", error);
+                showNotification('Error al agregar el comentario', 'error');
+            }
+        }
+
+        // Cargar posts al iniciar
+        window.addEventListener('load', function() {
+            if (checkFirebase()) {
+                loadPosts();
+            }
+        });
 
         let currentFilter = 'all';
         let currentSearchQuery = '';
-        let currentPostId = null;
 
         // Inicializar la página
         document.addEventListener('DOMContentLoaded', function() {
@@ -935,59 +975,6 @@
             return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
         }
 
-        function addComment(event) {
-            event.preventDefault();
-            
-            const commentInput = document.getElementById('commentInput');
-            const commentText = commentInput.value.trim();
-            
-            if (!commentText || !currentPostId) return;
-
-            const post = posts.find(p => p.id === currentPostId);
-            if (!post) return;
-
-            const newComment = {
-                id: Date.now(),
-                author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
-                date: new Date().toISOString().split('T')[0],
-                content: commentText
-            };
-
-            post.comments.push(newComment);
-            renderComments(post.comments);
-            commentInput.value = '';
-            
-            // Mostrar mensaje de éxito
-            showNotification('Comentario agregado exitosamente', 'success');
-        }
-
-        function toggleLike(event, postId) {
-            event.stopPropagation();
-            
-            const post = posts.find(p => p.id === postId);
-            if (!post) return;
-
-            const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
-            const isLiked = likedPosts.includes(postId);
-
-            if (isLiked) {
-                post.likes--;
-                const index = likedPosts.indexOf(postId);
-                likedPosts.splice(index, 1);
-            } else {
-                post.likes++;
-                likedPosts.push(postId);
-            }
-
-            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-            renderPosts();
-            
-            // Si el modal está abierto, actualizar también ahí
-            if (currentPostId === postId) {
-                openPostModal(postId);
-            }
-        }
-
         function isPostLiked(postId) {
             const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
             return likedPosts.includes(postId);
@@ -1032,50 +1019,6 @@
         function closeAddPostModal() {
             document.getElementById('addPostModal').classList.remove('active');
             document.querySelector('.add-post-form').reset();
-        }
-
-        function submitNewPost(event) {
-            event.preventDefault();
-            
-            const title = document.getElementById('postTitle').value;
-            const type = document.getElementById('postType').value;
-            const excerpt = document.getElementById('postExcerpt').value;
-            const content = document.getElementById('postContent').value;
-            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-
-            const postData = {
-                title,
-                type,
-                excerpt: excerpt || content.substring(0, 150) + '...',
-                content,
-                author: 'Usuario Actual', // En una implementación real, esto vendría del usuario logueado
-                tags
-            };
-
-            // Enviar al servidor
-            fetch('community_api.php?action=create_post', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Agregar el nuevo post al inicio de la lista
-                    posts.unshift(data.post);
-                    renderPosts();
-                    closeAddPostModal();
-                    showNotification('Publicación creada exitosamente', 'success');
-                } else {
-                    showNotification(data.message || 'Error al crear la publicación', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Error al crear la publicación', 'error');
-            });
         }
 
         function getTypeEmoji(type) {
