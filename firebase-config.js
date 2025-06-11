@@ -1,5 +1,5 @@
 // Configuración de Firebase
-const firebaseConfig = {
+window.firebaseConfig = {
     apiKey: "AIzaSyA8cKi8j4S0xtPhQne1N22_DQ78mFX_9lE",
     authDomain: "web-page-achiad.firebaseapp.com",
     projectId: "web-page-achiad",
@@ -9,9 +9,9 @@ const firebaseConfig = {
     measurementId: "G-V6PBBB8WM9"
 };
 
-// Inicializar Firebase
+// Inicializar Firebase solo si no está inicializado
 if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(window.firebaseConfig);
 }
 
 // Exportar las instancias
