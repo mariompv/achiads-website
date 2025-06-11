@@ -1,8 +1,17 @@
 [
   {
-    "origin": ["*"],
-    "method": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "origin": [
+      "https://achiads-website.vercel.app",
+      "http://localhost:3000"
+    ],
+    "method": ["GET", "POST", "PUT", "DELETE"],
     "maxAgeSeconds": 3600,
-    "responseHeader": ["Content-Type", "x-goog-meta-custom"]
+    "responseHeader": [
+      "Content-Type",
+      "Firebase-Storage-Upload-Resumable-Hash",
+      "X-Firebase-Storage-IntelliTips",
+      "X-Upload-Content-Length",
+      "X-Upload-Content-Type"
+    ]
   }
-] 
+]
