@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Subida de Imagen a Firebase Storage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; }
+        .container { max-width: 400px; margin: 60px auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .drop-area {
+            border: 2px dashed #888;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #888;
+            background: #fafafa;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: background 0.2s;
+        }
+        .drop-area.dragover { background: #e0f7fa; }
+        #imagePreview { display: none; max-width: 100%; margin-top: 1rem; border-radius: 8px; }
+        #urlBox { margin-top: 1rem; word-break: break-all; background: #f0f0f0; padding: 0.5rem; border-radius: 6px; }
+    </style>
+    <!-- Firebase SDK compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script>
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyA8cKi8j4S0xtPhQne1N22_DQ78mFX_9lE",
+        authDomain: "web-page-achiad.firebaseapp.com",
+        projectId: "web-page-achiad",
+        storageBucket: "web-page-achiad.appspot.com",
+        messagingSenderId: "976716067507",
+        appId: "1:976716067507:web:da643f2b8fa027904636c6",
+        measurementId: "G-V6PBBB8WM9"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const storage = firebase.storage();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Subir Imagen a Firebase Storage</h2>
+        <div id="dropArea" class="drop-area">
+            Arrastra una imagen aquí o haz clic para seleccionar
+            <input type="file" id="fileInput" accept="image/png, image/jpeg" style="display:none;" />
+            <img id="imagePreview" src="" alt="Previsualización" />
+        </div>
+        <div id="status"></div>
+        <div id="urlBox"></div>
+    </div>
+    <script>
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const statusBox = document.getElementById('status');
+    const urlBox = document.getElementById('urlBox');
+
+    dropArea.addEventListener('click', () => fileInput.click());
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('dragover');
+    });
+    dropArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('dragover');
+    });
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        if (!['image/jpeg', 'image/png'].includes(file.type)) {
+            statusBox.textContent = 'Solo se permiten imágenes .jpg o .png';
+            imagePreview.style.display = 'none';
+            urlBox.textContent = '';
+            return;
+        }
+        statusBox.textContent = 'Subiendo imagen...';
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        uploadImage(file);
+    }
+
+    async function uploadImage(file) {
+        const storageRef = storage.ref('images/' + Date.now() + '-' + file.name);
+        try {
+            const snapshot = await storageRef.put(file);
+            const url = await snapshot.ref.getDownloadURL();
+            statusBox.textContent = '¡Imagen subida exitosamente!';
+            urlBox.innerHTML = `<b>URL:</b> <a href="${url}" target="_blank">${url}</a>`;
+        } catch (error) {
+            statusBox.textContent = 'Error subiendo la imagen';
+            urlBox.textContent = '';
+            console.error(error);
+        }
+    }
+    </script>
+</body>
+</html> 
