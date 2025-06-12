@@ -2,7 +2,10 @@
   {
     "origin": [
       "https://achiads-website.vercel.app",
-      "http://localhost:3000"
+      "http://localhost:3000",
+      "https://achiads-website.firebaseapp.com",
+      "https://achiads-website.web.app",
+      "https://achiads-website.firebase.com"
     ],
     "method": ["GET", "POST", "PUT", "DELETE"],
     "maxAgeSeconds": 3600,
