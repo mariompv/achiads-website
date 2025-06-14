@@ -17,7 +17,14 @@ const STATIC_FILES = [
     '/favicon.svg',
     '/manifest.json',
     '/404.html',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap'
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap',
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+    'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+    'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+    'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css',
+    'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js',
+    'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg'
 ];
 
 // Archivos que no deben cachearse
@@ -83,6 +90,11 @@ self.addEventListener('fetch', event => {
         return;
     }
     
+    // Excluir recursos externos (diferente origen)
+    if (url.origin !== self.location.origin) {
+        return; // No interceptar recursos de otros orígenes
+    }
+    
     // Excluir ciertas rutas del cache
     if (EXCLUDED_PATHS.some(path => url.pathname.startsWith(path))) {
         return;
@@ -123,13 +135,18 @@ async function cacheFirst(request) {
             return cachedResponse;
         }
         
-        const networkResponse = await fetch(request);
+        const networkResponse = await fetch(request, {
+            credentials: 'omit',
+            mode: 'cors'
+        });
+        
         if (networkResponse.ok) {
             const cache = await caches.open(STATIC_CACHE);
-            cache.put(request, networkResponse.clone());
+            await cache.put(request, networkResponse.clone());
+            return networkResponse;
         }
-        return networkResponse;
         
+        throw new Error('Network response was not ok');
     } catch (error) {
         console.error('Cache First error:', error);
         return caches.match('/404.html');

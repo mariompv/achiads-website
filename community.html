@@ -730,20 +730,7 @@
     </div>
 
     <!-- Scripts de Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="./firebase-config.js"></script>
-    <script>
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        window.db = firebase.firestore();
-        window.auth = firebase.auth();
-        window.storage = firebase.storage();
-    </script>
-
-    <!-- Lógica principal de la comunidad -->
     <script>
     // Verificar que Firebase está inicializado
     function checkFirebase() {

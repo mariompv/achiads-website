@@ -50,9 +50,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDK compat (MOVER AL HEAD) -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Splide -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    
+    <!-- Custom Firebase Config -->
     <script src="firebase-config.js"></script>
     <script>
       // Inicializar Firebase si no está inicializado (seguridad extra)
@@ -119,20 +129,20 @@
             </div>
         </section>
 
-        <!-- ACHIADS Noticias (ahora dentro del main) -->
-        <section class="section section-publicaciones">
-          <div class="container">
-            <div class="section__header">
-              <h2 class="section__title">ACHIADS Noticias</h2>
-              <p class="section__subtitle">
-                Comparte conocimiento, descubre las últimas noticias sobre IA sustentable, 
-                participa en discusiones y conecta con otros miembros de nuestra comunidad.
-              </p>
+        <!-- ACHIADS Noticias -->
+        <section class="news-section">
+            <div class="news-container">
+                <div class="section__header">
+                    <h2 class="section__title">ACHIADS Noticias</h2>
+                    <p class="section__subtitle">
+                        Comparte conocimiento, descubre las últimas noticias sobre IA sustentable, 
+                        participa en discusiones y conecta con otros miembros de nuestra comunidad.
+                    </p>
+                </div>
+                <div class="news-grid" id="homeNewsGrid">
+                    <!-- Las noticias se cargarán aquí dinámicamente -->
+                </div>
             </div>
-            <div class="grid grid--3col" id="homeNewsGrid">
-              <!-- Las noticias se cargarán aquí dinámicamente -->
-            </div>
-          </div>
         </section>
 
         <!-- About Section -->
@@ -550,22 +560,29 @@
       }
       function renderHomeNews(posts) {
         const grid = document.getElementById('homeNewsGrid');
-        if (!posts.length) {
-          grid.innerHTML = '<div style="color:#888; padding:2rem;">No hay noticias recientes.</div>';
-          return;
+        
+        if (!posts || posts.length === 0) {
+            grid.innerHTML = '<div class="news-error">No hay noticias recientes.</div>';
+            return;
         }
+
         grid.innerHTML = posts.map(post => `
-          <div class="card">
-            <div class="post-image">
-              <img src="${post.image || 'assets/images/news-placeholder.jpg'}" alt="${post.title}">
-            </div>
-            <h3 class="card__title">${post.title}</h3>
-            <p class="card__description">${post.excerpt || ''}</p>
-            <div class="post-meta" style="font-size:0.9em; color:var(--neutral-500); margin-bottom:0.5rem;">
-              <span>Por ${post.author || 'Anónimo'}</span> · <span>${post.date ? new Date(post.date).toLocaleDateString() : ''}</span>
-            </div>
-            <a href="community.html#${post.id}" class="news-card-link">Continúa leyendo <span style="font-size:1.2em">→</span></a>
-          </div>
+            <article class="news-card">
+                <div class="news-card__image">
+                    <img src="${post.image || 'assets/images/news-placeholder.jpg'}" 
+                         alt="${post.title}"
+                         loading="lazy"
+                         width="800"
+                         height="450">
+                </div>
+                <div class="news-card__content">
+                    <h3 class="news-card__title">${post.title}</h3>
+                    <p class="news-card__excerpt">${post.excerpt || post.content.substring(0, 150) + '...'}</p>
+                    <a href="community.html#${post.id}" class="news-card__link">
+                        Continúa leyendo
+                    </a>
+                </div>
+            </article>
         `).join('');
       }
       document.addEventListener('DOMContentLoaded', loadNewsPreview);
