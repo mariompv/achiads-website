@@ -1,22 +1,44 @@
 /**
  * ACHIADS - JavaScript Principal
  * Asociación Chilena de IA para el Desarrollo Sustentable
- * Versión: 1.1.0 - Con funcionalidades de comunidad
+ * Versión: 1.2.0 - Optimizado para rendimiento
  */
 
 /* ================================
    INICIALIZACIÓN
    ================================ */
-   document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar componentes críticos primero
     initializeNavigation();
-    initializeSmoothScrolling();
-    initializeContactForm();
     initializeMobileMenu();
-    initializeIntersectionObserver();
-    initializeThemeDetection();
-    initializePerformanceOptimizations();
+    
+    // Inicializar componentes no críticos después
+    requestIdleCallback(() => {
+        initializeSmoothScrolling();
+        initializeContactForm();
+        initializeIntersectionObserver();
+        initializeThemeDetection();
+        initializePerformanceOptimizations();
+    });
+    
     console.log('✅ ACHIADS website initialized successfully');
 });
+
+// Cache DOM elements
+const domCache = {
+    nav: null,
+    header: null,
+    mobileToggle: null,
+    contactForm: null
+};
+
+// Initialize DOM cache
+function initializeDomCache() {
+    domCache.nav = document.querySelector('.nav');
+    domCache.header = document.querySelector('.header');
+    domCache.mobileToggle = document.querySelector('.mobile-menu-toggle');
+    domCache.contactForm = document.getElementById('contactForm');
+}
 
 /* ================================
    NAVEGACIÓN Y MENÚ
@@ -463,31 +485,41 @@ function initializeThemeDetection() {
    OPTIMIZACIONES DE RENDIMIENTO
    ================================ */
 function initializePerformanceOptimizations() {
-    // Lazy loading para imágenes (si no están ya con loading="lazy")
-    const images = document.querySelectorAll('img:not([loading])');
-    images.forEach(img => {
-        img.setAttribute('loading', 'lazy');
+    // Lazy load images
+    const lazyImages = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                observer.unobserve(img);
+            }
+        });
     });
 
-    // Precarga de recursos críticos
+    lazyImages.forEach(img => imageObserver.observe(img));
+
+    // Preload critical resources
     preloadCriticalResources();
     
-    // Monitoreo de Web Vitals (si está disponible)
-    if ('web-vital' in window) {
-        measureWebVitals();
-    }
+    // Initialize DOM cache
+    initializeDomCache();
 }
 
 function preloadCriticalResources() {
-    // Precargar la página de comunidad si el usuario está navegando hacia allá
-    const communityLinks = document.querySelectorAll('a[href*="community"]');
-    communityLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            const preloadLink = document.createElement('link');
-            preloadLink.rel = 'prefetch';
-            preloadLink.href = 'community.html';
-            document.head.appendChild(preloadLink);
-        }, { once: true });
+    const criticalResources = [
+        '/assets/css/styles.css',
+        '/assets/images/logo.svg',
+        '/favicon.svg'
+    ];
+
+    criticalResources.forEach(resource => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = resource.endsWith('.css') ? 'style' : 'image';
+        link.href = resource;
+        document.head.appendChild(link);
     });
 }
 

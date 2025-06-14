@@ -1,0 +1,12 @@
+{
+  "name": "achiads-website",
+  "version": "1.0.0",
+  "description": "ACHIADS Website",
+  "scripts": {
+    "optimize-images": "sharp-cli optimize --input 'assets/images/**/*.{png,jpg,jpeg}' --output 'assets/images/optimized/' --format webp"
+  },
+  "devDependencies": {
+    "sharp": "^0.32.1",
+    "sharp-cli": "^3.0.0"
+  }
+} 
