@@ -129,22 +129,6 @@
             </div>
         </section>
 
-        <!-- ACHIADS Noticias -->
-        <section class="news-section">
-            <div class="news-container">
-                <div class="section__header">
-                    <h2 class="section__title">ACHIADS Noticias</h2>
-                    <p class="section__subtitle">
-                        Comparte conocimiento, descubre las últimas noticias sobre IA sustentable, 
-                        participa en discusiones y conecta con otros miembros de nuestra comunidad.
-                    </p>
-                </div>
-                <div class="news-grid" id="homeNewsGrid">
-                    <!-- Las noticias se cargarán aquí dinámicamente -->
-                </div>
-            </div>
-        </section>
-
         <!-- About Section -->
         <section id="nosotros" class="section">
             <div class="container">
@@ -562,27 +546,29 @@
         const grid = document.getElementById('homeNewsGrid');
         
         if (!posts || posts.length === 0) {
-            grid.innerHTML = '<div class="news-error">No hay noticias recientes.</div>';
+            grid.innerHTML = '<li class="splide__slide"><div class="news-error">No hay noticias recientes.</div></li>';
             return;
         }
 
         grid.innerHTML = posts.map(post => `
-            <article class="news-card">
-                <div class="news-card__image">
-                    <img src="${post.image || 'assets/images/news-placeholder.jpg'}" 
-                         alt="${post.title}"
-                         loading="lazy"
-                         width="800"
-                         height="450">
-                </div>
-                <div class="news-card__content">
-                    <h3 class="news-card__title">${post.title}</h3>
-                    <p class="news-card__excerpt">${post.excerpt || post.content.substring(0, 150) + '...'}</p>
-                    <a href="community.html#${post.id}" class="news-card__link">
-                        Continúa leyendo
-                    </a>
-                </div>
-            </article>
+            <li class="splide__slide">
+                <article class="news-card">
+                    <div class="news-card__image">
+                        <img src="${post.image || 'assets/images/news-placeholder.jpg'}" 
+                             alt="${post.title}"
+                             loading="lazy"
+                             width="800"
+                             height="450">
+                    </div>
+                    <div class="news-card__content">
+                        <h3 class="news-card__title">${post.title}</h3>
+                        <p class="news-card__excerpt">${post.excerpt || post.content.substring(0, 150) + '...'}</p>
+                        <a href="community.html#${post.id}" class="news-card__link">
+                            Continúa leyendo
+                        </a>
+                    </div>
+                </article>
+            </li>
         `).join('');
       }
       document.addEventListener('DOMContentLoaded', loadNewsPreview);
@@ -738,6 +724,12 @@
         }
       }).mount();
     });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your existing JavaScript code here
+        });
     </script>
 </body>
 </html>
