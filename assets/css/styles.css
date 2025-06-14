@@ -114,6 +114,7 @@ p {
 
 .grid--3col {
     grid-template-columns: 1fr;
+    align-items: start;
 }
 
 @media (min-width: 768px) {
@@ -394,7 +395,12 @@ p {
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     border: 1px solid var(--neutral-200);
-    height: 100%;
+    /* height: 350px; */
+    max-width: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -424,6 +430,28 @@ p {
 .card__description {
     color: var(--neutral-500);
     line-height: 1.6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.card .post-image {
+  width: 100%;
+  height: 80px !important;
+  background: var(--neutral-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+.card .post-image img {
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
 }
 
 /* ================================
@@ -651,4 +679,159 @@ a:focus {
     .card {
         padding: var(--spacing-lg);
     }
+}
+
+/* News Preview Section */
+.news-preview-section {
+  background: linear-gradient(90deg, var(--primary-light) 0%, var(--accent) 100%);
+  padding: 3rem 0 2rem 0;
+}
+.news-preview-grid {
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+  max-width: var(--bp-xl);
+}
+.news-preview-title {
+  flex: 1 1 33%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.news-preview-heading {
+  color: var(--white);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  line-height: 1.1;
+}
+.news-preview-slider {
+  flex: 2 1 67%;
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+.news-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  min-width: 280px;
+  max-width: 340px;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--spacing-xl);
+  border: 1px solid var(--neutral-200);
+  height: 100%;
+}
+.news-card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: var(--neutral-200);
+  border-radius: 8px;
+}
+.news-card-content {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.news-card-title {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+.news-card-link {
+  margin-top: auto;
+  color: var(--accent);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  transition: color 0.2s;
+}
+.news-card-link:hover {
+  color: var(--primary-dark);
+}
+
+@media (max-width: 900px) {
+  .news-preview-grid {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .news-preview-title, .news-preview-slider {
+    flex: 1 1 100%;
+  }
+  .news-preview-heading {
+    font-size: 2rem;
+  }
+}
+
+/* ANULAR reglas globales para evitar conflictos en cards de noticias */
+.post-image, .post-image img {
+  height: auto !important;
+  max-height: none !important;
+}
+
+.home-news-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem 2rem 1rem;
+}
+.home-posts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+}
+@media (min-width: 768px) {
+  .home-posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Fondo gris claro para la sección de publicaciones/noticias */
+#homeNewsGrid {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Si quieres que toda la sección (no solo el grid) tenga fondo: */
+.section.section-publicaciones {
+  background: #f8f9fa;
+}
+
+/* Swiper Pilares Estratégicos */
+.pilares-swiper {
+  width: 100%;
+  padding: 2rem 0;
+  min-height: 350px;
+}
+.pilares-swiper .swiper-slide {
+  width: 340px !important;
+  flex: 0 0 340px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+.card-pilar {
+  width: 340px;
+  max-width: 95vw;
+  min-height: 320px;
+  height: auto;
+}
+
+#splide-pilares {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
 }

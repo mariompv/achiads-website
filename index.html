@@ -49,6 +49,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDK compat (MOVER AL HEAD) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+      // Inicializar Firebase si no está inicializado (seguridad extra)
+      if (!window.db && window.firebase && window.firebaseConfig) {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(window.firebaseConfig);
+        }
+        window.db = firebase.firestore();
+      }
+    </script>
+
+    <!-- Agrega en el <head> los enlaces de Swiper.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 </head>
 <body>
     <!-- Header -->
@@ -67,7 +85,7 @@
                         <li><a href="#proyectos" class="nav__link">Proyectos</a></li>
                         <li><a href="#investigacion" class="nav__link">Investigación</a></li>
                         <li><a href="#recursos" class="nav__link">Recursos</a></li>
-                        <li><a href="community.html" class="nav__link">Comunidad</a></li>
+                        <li><a href="community.html" class="nav__link">ACHIADS Noticias</a></li>
                         <li><a href="#contacto" class="nav__link">Contacto</a></li>
                     </ul>
                 </nav>
@@ -83,7 +101,6 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main role="main">
         <!-- Hero Section -->
         <section id="inicio" class="hero">
@@ -102,6 +119,22 @@
             </div>
         </section>
 
+        <!-- ACHIADS Noticias (ahora dentro del main) -->
+        <section class="section section-publicaciones">
+          <div class="container">
+            <div class="section__header">
+              <h2 class="section__title">ACHIADS Noticias</h2>
+              <p class="section__subtitle">
+                Comparte conocimiento, descubre las últimas noticias sobre IA sustentable, 
+                participa en discusiones y conecta con otros miembros de nuestra comunidad.
+              </p>
+            </div>
+            <div class="grid grid--3col" id="homeNewsGrid">
+              <!-- Las noticias se cargarán aquí dinámicamente -->
+            </div>
+          </div>
+        </section>
+
         <!-- About Section -->
         <section id="nosotros" class="section">
             <div class="container">
@@ -114,31 +147,30 @@
                 </div>
                 
                 <div class="grid grid--3col">
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">🤝</div>
-                        <h3 class="card__title">Colaboración</h3>
-                        <p class="card__description">
-                            Conectamos investigadores, empresas, gobierno y sociedad civil para crear 
-                            soluciones de IA con impacto social positivo.
-                        </p>
+                    <div class="card quienes-card" data-id="director3">
+                        <div class="card__icon" aria-hidden="true">👤</div>
+                        <h3 class="card__title">Nombre Director 3</h3>
+                        <p class="card__description">Director de Proyectos</p>
                     </div>
-                    
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">🌱</div>
-                        <h3 class="card__title">Sustentabilidad</h3>
-                        <p class="card__description">
-                            Desarrollamos proyectos de IA que contribuyen directamente a los 
-                            Objetivos de Desarrollo Sostenible de la ONU.
-                        </p>
+                    <div class="card quienes-card" data-id="director4">
+                        <div class="card__icon" aria-hidden="true">👤</div>
+                        <h3 class="card__title">Nombre Director 4</h3>
+                        <p class="card__description">Directora de Vinculación</p>
                     </div>
-                    
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">⚡</div>
-                        <h3 class="card__title">Innovación</h3>
-                        <p class="card__description">
-                            Promovemos la investigación y desarrollo de tecnologías de IA 
-                            avanzadas con enfoque ético y transparente.
-                        </p>
+                    <div class="card quienes-card" data-id="director5">
+                        <div class="card__icon" aria-hidden="true">👤</div>
+                        <h3 class="card__title">Nombre Director 5</h3>
+                        <p class="card__description">Director de Innovación</p>
+                    </div>
+                    <div class="card quienes-card" data-id="director1">
+                        <div class="card__icon" aria-hidden="true">👤</div>
+                        <h3 class="card__title">Nombre Director 1</h3>
+                        <p class="card__description">Director Ejecutivo</p>
+                    </div>
+                    <div class="card quienes-card" data-id="director2">
+                        <div class="card__icon" aria-hidden="true">👤</div>
+                        <h3 class="card__title">Nombre Director 2</h3>
+                        <p class="card__description">Director Científico</p>
                     </div>
                 </div>
             </div>
@@ -172,50 +204,26 @@
         <section id="proyectos" class="section section--alt">
             <div class="container">
                 <div class="section__header">
-                    <h2 class="section__title">Nuestros Proyectos</h2>
+                    <h2 class="section__title">Pilares Estratégicos</h2>
                     <p class="section__subtitle">
-                        Desarrollamos soluciones de IA aplicadas a desafíos reales de sustentabilidad 
-                        en sectores clave de la economía chilena.
+                        Estos son los pilares estratégicos que guían nuestro trabajo en IA y sustentabilidad.
                     </p>
                 </div>
-                
-                <div class="grid grid--2col">
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">🌾</div>
-                        <h3 class="card__title">AgriTech Sustentable</h3>
-                        <p class="card__description">
-                            Desarrollo de algoritmos de machine learning para optimizar el uso de agua 
-                            y recursos en la agricultura, aumentando la productividad mientras se reduce 
-                            el impacto ambiental.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">🏙️</div>
-                        <h3 class="card__title">Ciudades Inteligentes</h3>
-                        <p class="card__description">
-                            Implementación de sistemas de IA para la gestión eficiente de energía, 
-                            transporte y residuos en áreas urbanas, contribuyendo a ciudades más sustentables.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">🌊</div>
-                        <h3 class="card__title">Conservación Marina</h3>
-                        <p class="card__description">
-                            Uso de visión computacional e IA para monitorear y proteger ecosistemas marinos, 
-                            apoyando la pesca sustentable y la conservación de especies.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card__icon" aria-hidden="true">⚡</div>
-                        <h3 class="card__title">Energías Renovables</h3>
-                        <p class="card__description">
-                            Optimización de redes eléctricas inteligentes mediante IA para maximizar 
-                            la integración de energías renovables y mejorar la eficiencia energética.
-                        </p>
-                    </div>
+                <!-- Carrusel Splide -->
+                <div id="splide-pilares" class="splide">
+                  <div class="splide__track">
+                    <ul class="splide__list">
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🌾</div><h3 class="card__title">AgriTech Sustentable</h3><p class="card__description">Desarrollo de algoritmos de machine learning para optimizar el uso de agua y recursos en la agricultura.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🏙️</div><h3 class="card__title">Ciudades Inteligentes</h3><p class="card__description">Implementación de sistemas de IA para la gestión eficiente de energía, transporte y residuos.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🌊</div><h3 class="card__title">Conservación Marina</h3><p class="card__description">Uso de IA para monitorear y proteger ecosistemas marinos.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">⚡</div><h3 class="card__title">Energías Renovables</h3><p class="card__description">Optimización de redes eléctricas inteligentes mediante IA.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🧑‍💻</div><h3 class="card__title">Educación y Capacitación</h3><p class="card__description">Fomento de la formación en IA y sustentabilidad.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🔬</div><h3 class="card__title">Investigación y Desarrollo</h3><p class="card__description">Impulso a la investigación científica y tecnológica en IA.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🤝</div><h3 class="card__title">Alianzas Estratégicas</h3><p class="card__description">Colaboración con instituciones y empresas para potenciar la IA sustentable.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">🌐</div><h3 class="card__title">Ética y Gobernanza</h3><p class="card__description">Promoción de principios éticos y buenas prácticas en IA.</p></div></li>
+                      <li class="splide__slide"><div class="card card-pilar"><div class="card__icon">📊</div><h3 class="card__title">Datos Abiertos y Transparencia</h3><p class="card__description">Impulso a la apertura y transparencia de datos en IA.</p></div></li>
+                    </ul>
+                  </div>
                 </div>
             </div>
         </section>
@@ -266,39 +274,6 @@
                                 <em>Conference on AI for Good, 2024</em>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Section -->
-        <section class="section section--alt">
-            <div class="container">
-                <div class="section__header">
-                    <h2 class="section__title">Nuestro Equipo</h2>
-                    <p class="section__subtitle">
-                        Un equipo multidisciplinario de expertos comprometidos con el desarrollo 
-                        responsable de la inteligencia artificial.
-                    </p>
-                </div>
-                
-                <div class="grid grid--3col">
-                    <div class="team-member">
-                        <div class="team-member__photo" aria-hidden="true">DR</div>
-                        <h3 class="team-member__name">Dra. María Rodriguez</h3>
-                        <p class="team-member__role">Directora Ejecutiva</p>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="team-member__photo" aria-hidden="true">JS</div>
-                        <h3 class="team-member__name">Dr. Juan Silva</h3>
-                        <p class="team-member__role">Director de Investigación</p>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="team-member__photo" aria-hidden="true">AC</div>
-                        <h3 class="team-member__name">Ana Contreras</h3>
-                        <p class="team-member__role">Coordinadora de Proyectos</p>
                     </div>
                 </div>
             </div>
@@ -555,6 +530,197 @@
                     });
             });
         }
+    </script>
+
+    <script>
+      async function loadNewsPreview() {
+        if (!window.db) {
+          document.getElementById('homeNewsGrid').innerHTML = '<div style="color:red">No se pudo inicializar Firebase.</div>';
+          console.error('Firebase no está inicializado (window.db no existe)');
+          return;
+        }
+        try {
+          const snapshot = await window.db.collection('posts').orderBy('date', 'desc').limit(3).get();
+          const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          renderHomeNews(posts);
+        } catch (error) {
+          document.getElementById('homeNewsGrid').innerHTML = '<div style="color:red">No se pudieron cargar las noticias.</div>';
+          console.error('Error al cargar noticias desde Firestore:', error);
+        }
+      }
+      function renderHomeNews(posts) {
+        const grid = document.getElementById('homeNewsGrid');
+        if (!posts.length) {
+          grid.innerHTML = '<div style="color:#888; padding:2rem;">No hay noticias recientes.</div>';
+          return;
+        }
+        grid.innerHTML = posts.map(post => `
+          <div class="card">
+            <div class="post-image">
+              <img src="${post.image || 'assets/images/news-placeholder.jpg'}" alt="${post.title}">
+            </div>
+            <h3 class="card__title">${post.title}</h3>
+            <p class="card__description">${post.excerpt || ''}</p>
+            <div class="post-meta" style="font-size:0.9em; color:var(--neutral-500); margin-bottom:0.5rem;">
+              <span>Por ${post.author || 'Anónimo'}</span> · <span>${post.date ? new Date(post.date).toLocaleDateString() : ''}</span>
+            </div>
+            <a href="community.html#${post.id}" class="news-card-link">Continúa leyendo <span style="font-size:1.2em">→</span></a>
+          </div>
+        `).join('');
+      }
+      document.addEventListener('DOMContentLoaded', loadNewsPreview);
+    </script>
+
+    <!-- Modal para detalle de quienes somos -->
+    <div id="quienesModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
+      <div class="modal-content" style="background:#fff; border-radius:12px; max-width:400px; width:90%; padding:2rem; position:relative; box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <button id="closeQuienesModal" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+        <div id="quienesIcon" style="width:120px; height:120px; border-radius:50%; background:#eee; margin:0 auto 1rem auto; background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; font-size:3rem;"></div>
+        <h2 id="quienesTitle" style="text-align:center; margin-bottom:0.5rem;">Título</h2>
+        <h4 id="quienesSubtitle" style="text-align:center; color:#666; margin-bottom:1rem; display:none;">Subtítulo</h4>
+        <div id="quienesDesc" style="margin-bottom:1.5rem; color:#444; text-align:center;">Aquí va la descripción detallada.</div>
+        <a id="quienesLink" href="#" target="_blank" style="display:none; align-items:center; justify-content:center; gap:0.5em; background:#0077b5; color:#fff; padding:0.5em 1em; border-radius:6px; text-decoration:none; font-weight:500;">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="width:1.2em; height:1.2em; filter:invert(1);"> <span id="quienesLinkText">Ver más</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Script para abrir/cerrar y rellenar el modal de quienes somos -->
+    <script>
+    const quienesData = {
+      director3: {
+        icon: 'https://randomuser.me/api/portraits/men/34.jpg',
+        title: 'Nombre Director 3',
+        subtitle: 'Director de Proyectos',
+        desc: 'Aquí puedes escribir el CV o descripción detallada del Director de Proyectos.',
+        link: 'https://www.linkedin.com/',
+        linkText: 'Ver en LinkedIn'
+      },
+      director4: {
+        icon: 'https://randomuser.me/api/portraits/women/35.jpg',
+        title: 'Nombre Director 4',
+        subtitle: 'Directora de Vinculación',
+        desc: 'Aquí puedes escribir el CV o descripción detallada de la Directora de Vinculación.',
+        link: 'https://www.linkedin.com/',
+        linkText: 'Ver en LinkedIn'
+      },
+      director5: {
+        icon: 'https://randomuser.me/api/portraits/men/36.jpg',
+        title: 'Nombre Director 5',
+        subtitle: 'Director de Innovación',
+        desc: 'Aquí puedes escribir el CV o descripción detallada del Director de Innovación.',
+        link: 'https://www.linkedin.com/',
+        linkText: 'Ver en LinkedIn'
+      },
+      director1: {
+        icon: 'https://randomuser.me/api/portraits/men/32.jpg',
+        title: 'Nombre Director 1',
+        subtitle: 'Director Ejecutivo',
+        desc: 'Aquí puedes escribir el CV o descripción detallada del Director Ejecutivo.',
+        link: 'https://www.linkedin.com/',
+        linkText: 'Ver en LinkedIn'
+      },
+      director2: {
+        icon: 'https://randomuser.me/api/portraits/men/33.jpg',
+        title: 'Nombre Director 2',
+        subtitle: 'Director Científico',
+        desc: 'Aquí puedes escribir el CV o descripción detallada del Director Científico.',
+        link: 'https://www.linkedin.com/',
+        linkText: 'Ver en LinkedIn'
+      }
+    };
+
+    document.querySelectorAll('.quienes-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const data = quienesData[id];
+        // Si es imagen, mostrar como fondo, si es emoji, mostrar como texto
+        if (data.icon.startsWith('http')) {
+          document.getElementById('quienesIcon').style.backgroundImage = `url('${data.icon}')`;
+          document.getElementById('quienesIcon').textContent = '';
+        } else {
+          document.getElementById('quienesIcon').style.backgroundImage = '';
+          document.getElementById('quienesIcon').textContent = data.icon;
+        }
+        document.getElementById('quienesTitle').textContent = data.title;
+        if (data.subtitle) {
+          document.getElementById('quienesSubtitle').style.display = '';
+          document.getElementById('quienesSubtitle').textContent = data.subtitle;
+        } else {
+          document.getElementById('quienesSubtitle').style.display = 'none';
+        }
+        document.getElementById('quienesDesc').textContent = data.desc;
+        if (data.link) {
+          document.getElementById('quienesLink').style.display = 'flex';
+          document.getElementById('quienesLink').href = data.link;
+          document.getElementById('quienesLinkText').textContent = data.linkText || 'Ver más';
+        } else {
+          document.getElementById('quienesLink').style.display = 'none';
+        }
+        document.getElementById('quienesModal').style.display = 'flex';
+      });
+    });
+    document.getElementById('closeQuienesModal').onclick = function() {
+      document.getElementById('quienesModal').style.display = 'none';
+    };
+    window.addEventListener('click', function(e) {
+      const modal = document.getElementById('quienesModal');
+      if (e.target === modal) modal.style.display = 'none';
+    });
+    </script>
+
+    <!-- Inicializa Swiper.js para el slider de pilares -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      new Swiper('.pilares-swiper', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 3,
+        loop: true,
+        spaceBetween: 32,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+        },
+        coverflowEffect: {
+          rotate: 30,
+          stretch: 0,
+          depth: 120,
+          modifier: 1,
+          slideShadows: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          0: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 }
+        }
+      });
+    });
+    </script>
+
+    <!-- Al final del body: Splide JS y script de inicialización -->
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new Splide('#splide-pilares', {
+        type: 'loop',
+        perPage: 3,
+        gap: '2rem',
+        autoplay: true,
+        pauseOnHover: true,
+        arrows: true,
+        pagination: false,
+        breakpoints: {
+          900: { perPage: 2 },
+          600: { perPage: 1 }
+        }
+      }).mount();
+    });
     </script>
 </body>
 </html>
